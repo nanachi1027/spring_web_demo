@@ -3,6 +3,7 @@ package org.example.model.employee;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.example.model.response.PageResponse;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper =  false)
-public class EmployeeResponse {
+public class EmployeeResponse extends PageResponse {
     @ApiModelProperty(required = true, value = "")
     private List<Employee> items;
 }

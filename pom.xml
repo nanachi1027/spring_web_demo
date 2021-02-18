@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <docker.image.prefix>fullstack_docker</docker.image.prefix>
         <springfox-version>2.7.0</springfox-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
@@ -20,6 +21,7 @@
         <version>1.5.10.RELEASE</version>
         <relativePath/>
     </parent>
+    <packaging>war</packaging>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -38,8 +40,15 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warSourceExcludes>src/main/resources/**</warSourceExcludes>
+                    <warName>appweb</warName>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
@@ -53,7 +62,7 @@
                             <outputDirectory>${project.basedir}/src/main/resources/public</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/webui/dist</directory>
+                                    <directory>${project.basedir}/front/dist</directory>
                                     <excludes>
                                         <exclude>*.gz</exclude>
                                     </excludes>
@@ -62,8 +71,28 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin -->
-
+            </plugin>
+            <!-- docker image -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.14</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <imageTags>
+                        <imageTag>${project.version}</imageTag>
+                        <imageTag>lastest</imageTag>
+                    </imageTags>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -71,15 +100,25 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--<exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!-- scope>provided</scope -->
+           <!-- <scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <!--SpringFox dependencies -->
         <dependency>

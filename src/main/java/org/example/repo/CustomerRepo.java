@@ -12,9 +12,9 @@ import java.util.List;
  * @Date: 2021/2/18 12:13 上午
  */
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
-    public List<Customer> findAll();
+    List<Customer> findAll();
 
-    public Page<Customer> findAll(Pageable p);
+    Page<Customer> findAll(Pageable p);
 
     Customer save(Customer c);
 

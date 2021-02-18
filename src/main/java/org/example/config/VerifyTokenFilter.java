@@ -1,6 +1,6 @@
 package org.example.config;
 
-import org.example.identity.TokenUtil;
+import org.example.service.TokenService;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -14,10 +14,10 @@ import java.io.IOException;
  * @Date: 2021/2/18 2:58 上午
  */
 public class VerifyTokenFilter extends GenericFilterBean {
-    private final TokenUtil tokenUtil;
+    private final TokenService tokenService;
 
-    public VerifyTokenFilter(TokenUtil tokenUtil) {
-        this.tokenUtil = tokenUtil;
+    public VerifyTokenFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @Override
